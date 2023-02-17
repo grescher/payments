@@ -52,16 +52,16 @@ func createSchema(db *sql.DB) error {
 	}
 	defer file.Close()
 
-	var query string
+	var createSchemaQuery string
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
-		query += scanner.Text() + "\n"
+		createSchemaQuery += scanner.Text() + "\n"
 	}
 	if err = scanner.Err(); err != nil {
 		return schemaErr.Wrap(err)
 	}
 
-	if _, err := db.Exec(query); err != nil {
+	if _, err := db.Exec(createSchemaQuery); err != nil {
 		return schemaErr.Wrap(err)
 	}
 	return nil
