@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"playground/config"
+	"payments/config"
 
 	_ "github.com/jackc/pgx/v5/stdlib"
 	"github.com/zeebo/errs"
