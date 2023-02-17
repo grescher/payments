@@ -6,7 +6,10 @@ import (
 	"os"
 
 	"github.com/joho/godotenv"
+	"github.com/zeebo/errs"
 )
+
+var configErr = errs.Class("configuration error")
 
 const (
 	envFilePath = "config.env"
@@ -18,15 +21,16 @@ const (
 	dbName        = "DB_NAME"
 	dbUser        = "DB_USER"
 	dbPassword    = "DB_PASS"
+	dbSchemaPath  = "DB_SCHEMA_PATH"
 )
 
 func init() {
 	err := godotenv.Load(envFilePath)
 	if err != nil {
-		log.Println(err)
+		log.Println(configErr.Wrap(err))
 		setDefaults()
 		if err = writeConfig(envFilePath); err != nil {
-			log.Fatal(err)
+			log.Fatal(configErr.Wrap(err))
 		}
 	}
 }
@@ -59,23 +63,29 @@ func DBPassword() string {
 	return os.Getenv(dbPassword)
 }
 
+func DBSchemaPath() string {
+	return os.Getenv(dbSchemaPath)
+}
+
 func setDefaults() {
-	log.Println("setting defaults")
+	log.Println("setting configuration defaults")
 	os.Setenv(serverAddress, "127.0.0.1")
 	os.Setenv(serverPort, "8080")
 	os.Setenv(dbAddress, "127.0.0.1")
 	os.Setenv(dbPort, "5432")
 	os.Setenv(dbName, "payments")
 	os.Setenv(dbUser, "payments")
-	os.Setenv(dbPassword, "lth gfhjk")
+	os.Setenv(dbPassword, "lthgfhjk")
+	os.Setenv(dbSchemaPath, "./db/schema.sql")
 }
 
 func writeConfig(path string) error {
 	log.Println("creating config.env file")
+	wdErr := errs.Class("write defaults error")
 	params := os.O_WRONLY | os.O_CREATE | os.O_APPEND
 	file, err := os.OpenFile(path, params, 0600)
 	if err != nil {
-		return err
+		return wdErr.Wrap(err)
 	}
 
 	log.Println("saving defaults")
@@ -88,12 +98,13 @@ func writeConfig(path string) error {
 		dbName+":"+DBName()+"\n",
 		dbUser+":"+DBUser()+"\n",
 		dbPassword+":"+DBPassword()+"\n",
+		dbSchemaPath+":"+DBSchemaPath()+"\n",
 	)
 	if err != nil {
-		return err
+		return wdErr.Wrap(err)
 	}
 	if err = file.Close(); err != nil {
-		return err
+		return wdErr.Wrap(err)
 	}
 	return nil
 }
