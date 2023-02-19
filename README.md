@@ -53,11 +53,15 @@
 
 - POST /auth/signup
 - POST /auth/login
-- GET /user/{id}
+- GET /users
+- GET /users/{id}
+- PUT /users/{id}
+- GET /accounts
 - GET /accounts/{id}
 - PUT /accounts/{id}
-- ...
-- POST /payments
+- GET /payments
+- GET /payments/{id}
+- PUT /payments/{id}
 
 ## DB Schema
 
