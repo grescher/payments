@@ -3,8 +3,12 @@ CREATE TABLE IF NOT EXISTS users (
   name VARCHAR NOT NULL,
   email VARCHAR NOT NULL UNIQUE,
   password_hash BYTEA NOT NULL,
-  is_admin BOOL DEFAULT false,
   is_active BOOL DEFAULT true
+);
+
+CREATE TABLE IF NOT EXISTS admins (
+	id SERIAL UNIQUE,
+  user_id INT REFERENCES users (id)
 );
 
 CREATE TABLE IF NOT EXISTS accounts (
