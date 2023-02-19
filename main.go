@@ -6,14 +6,14 @@ import (
 )
 
 func main() {
-	storage, err := db.NewPostgresDB(db.DatabaseURL())
-	check(err)
-	defer storage.Close()
-
-}
-
-func check(err error) {
+	connDB, err := db.NewPostgresDB(db.DatabaseURL())
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer connDB.Close()
+
+	// r := repository.NewRepository(connDB)
+	// s := service.NewService(r)
+	// h := server.NewHandlers(s)
+	// server.Run(h, config.ServerPort())
 }
