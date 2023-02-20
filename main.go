@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"payments/db"
+	"payments/repository"
 )
 
 func main() {
@@ -12,7 +13,7 @@ func main() {
 	}
 	defer connDB.Close()
 
-	// r := repository.NewRepository(connDB)
+	r := repository.NewRepository(connDB)
 	// s := service.NewService(r)
 	// h := server.NewHandlers(s)
 	// server.Run(h, config.ServerPort())
