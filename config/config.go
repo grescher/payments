@@ -11,9 +11,11 @@ import (
 
 var configErr = errs.Class("configuration error")
 
-const (
-	envFilePath = "config.env"
+// Name of the configuration file.
+const envFilePath = "config.env"
 
+// Names of environment variables.
+const (
 	serverAddress = "SERVER_ADDR"
 	serverPort    = "SERVER_PORT"
 	dbAddress     = "DB_ADDR"
@@ -22,6 +24,18 @@ const (
 	dbUser        = "DB_USER"
 	dbPassword    = "DB_PASS"
 	dbSchemaPath  = "DB_SCHEMA_PATH"
+)
+
+// Configuration default settings.
+const (
+	defaultServerAddress = "127.0.0.1"
+	defaultServerPort    = "8080"
+	defaultDBAddress     = "127.0.0.1"
+	defaultDBPort        = "5432"
+	defaultDBName        = "payments"
+	defaultDBUser        = "payments"
+	defaultDBPassword    = "lthgfhjk"
+	defaultDBSchemaPath  = "./db/schema.sql"
 )
 
 func init() {
@@ -67,18 +81,20 @@ func DBSchemaPath() string {
 	return os.Getenv(dbSchemaPath)
 }
 
+// Sets the configuration to defaults.
 func setDefaults() {
 	log.Println("setting configuration defaults")
-	os.Setenv(serverAddress, "127.0.0.1")
-	os.Setenv(serverPort, "8080")
-	os.Setenv(dbAddress, "127.0.0.1")
-	os.Setenv(dbPort, "5432")
-	os.Setenv(dbName, "payments")
-	os.Setenv(dbUser, "payments")
-	os.Setenv(dbPassword, "lthgfhjk")
-	os.Setenv(dbSchemaPath, "./db/schema.sql")
+	os.Setenv(serverAddress, defaultServerAddress)
+	os.Setenv(serverPort, defaultServerPort)
+	os.Setenv(dbAddress, defaultDBAddress)
+	os.Setenv(dbPort, defaultDBPort)
+	os.Setenv(dbName, defaultDBName)
+	os.Setenv(dbUser, defaultDBUser)
+	os.Setenv(dbPassword, defaultDBPassword)
+	os.Setenv(dbSchemaPath, defaultDBSchemaPath)
 }
 
+// Creates the configuration file.
 func writeConfig(path string) error {
 	log.Println("creating config.env file")
 	wdErr := errs.Class("write defaults error")
