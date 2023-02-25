@@ -7,7 +7,7 @@ import (
 )
 
 type Authorization interface {
-	CreateUser(ctx context.Context, user models.User) error
+	CreateUser(ctx context.Context, user models.User) (id int, err error)
 	GetUserID(ctx context.Context, name, password string) (id int, err error)
 }
 
