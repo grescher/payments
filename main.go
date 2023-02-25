@@ -2,19 +2,12 @@ package main
 
 import (
 	"log"
-	"payments/db"
-	"payments/repository"
+	"payments/cmd"
 )
 
 func main() {
-	connDB, err := db.NewPostgresDB(db.DatabaseURL())
-	if err != nil {
+	if err := cmd.RunApp(); err != nil {
 		log.Fatal(err)
 	}
-	defer connDB.Close()
-
-	r := repository.NewRepository(connDB)
-	// s := service.NewService(r)
-	// h := server.NewHandlers(s)
-	// server.Run(h, config.ServerPort())
+	log.Println("done")
 }
