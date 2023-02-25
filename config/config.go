@@ -24,6 +24,7 @@ const (
 	dbUser        = "DB_USER"
 	dbPassword    = "DB_PASS"
 	dbSchemaPath  = "DB_SCHEMA_PATH"
+	hashSalt      = "HASH_SALT"
 )
 
 // Configuration default settings.
@@ -36,6 +37,7 @@ const (
 	defaultDBUser        = "payments"
 	defaultDBPassword    = "lthgfhjk"
 	defaultDBSchemaPath  = "./db/schema.sql"
+	defaultHashSalt      = "HaShSaLt"
 )
 
 func init() {
@@ -54,7 +56,7 @@ func ServerAddress() string {
 }
 
 func ServerPort() string {
-	return os.Getenv(serverPort)
+	return ":" + os.Getenv(serverPort)
 }
 
 func DBAddress() string {
@@ -81,6 +83,10 @@ func DBSchemaPath() string {
 	return os.Getenv(dbSchemaPath)
 }
 
+func HashSalt() string {
+	return os.Getenv(hashSalt)
+}
+
 // Sets the configuration to defaults.
 func setDefaults() {
 	log.Println("setting configuration defaults")
@@ -92,6 +98,7 @@ func setDefaults() {
 	os.Setenv(dbUser, defaultDBUser)
 	os.Setenv(dbPassword, defaultDBPassword)
 	os.Setenv(dbSchemaPath, defaultDBSchemaPath)
+	os.Setenv(hashSalt, defaultHashSalt)
 }
 
 // Creates the configuration file.
@@ -115,6 +122,7 @@ func writeConfig(path string) error {
 		dbUser+":"+DBUser()+"\n",
 		dbPassword+":"+DBPassword()+"\n",
 		dbSchemaPath+":"+DBSchemaPath()+"\n",
+		hashSalt+":"+HashSalt()+"\n",
 	)
 	if err != nil {
 		return wdErr.Wrap(err)
