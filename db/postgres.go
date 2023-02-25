@@ -83,6 +83,7 @@ func CreateSchema(db *sql.DB) error {
 	return nil
 }
 
+// Check whether the database is empty.
 func isEmpty(db *sql.DB) (bool, error) {
 	testQuery := `SELECT COUNT(*) 
 		FROM information_schema.tables 
