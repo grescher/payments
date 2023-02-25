@@ -4,15 +4,6 @@ import (
 	"time"
 )
 
-type User struct {
-	ID           int    `json:"id"`
-	Name         string `json:"name"`
-	Email        string `json:"email"`
-	PasswordHash string `json:"password_hash"`
-	IsAdmin      bool   `json:"is_admin"`
-	IsActive     bool   `json:"is_active"`
-}
-
 type Account struct {
 	ID       int     `json:"id"`
 	Name     string  `json:"name"` // IBAN
