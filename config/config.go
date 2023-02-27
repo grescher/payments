@@ -115,7 +115,7 @@ func writeConfig(path string) error {
 	_, err = fmt.Fprint(
 		file,
 		serverAddress+":"+ServerAddress()+"\n",
-		serverPort+":"+ServerPort()+"\n",
+		serverPort+ServerPort()+"\n",
 		dbAddress+":"+DBAddress()+"\n",
 		dbPort+":"+DBPort()+"\n",
 		dbName+":"+DBName()+"\n",
