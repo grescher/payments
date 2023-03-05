@@ -10,7 +10,7 @@ import (
 	"github.com/zeebo/errs"
 )
 
-var authErr = errs.Class("authorization handlers error")
+var authErr = errs.Class("authorization handlers")
 
 type AuthorizationHandlers struct {
 	service service.Authorization

@@ -12,7 +12,7 @@ import (
 	"github.com/zeebo/errs"
 )
 
-var dbErr = errs.Class("database error")
+var dbErr = errs.Class("database")
 
 func NewPostgresDB(cfg string) (*sql.DB, error) {
 	log.Print("connecting database... ")

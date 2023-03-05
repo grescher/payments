@@ -12,7 +12,7 @@ import (
 	"github.com/zeebo/errs"
 )
 
-var authErr = errs.Class("authorization service error")
+var authErr = errs.Class("authorization service")
 
 type AuthorizationService struct {
 	repo repository.Authorization

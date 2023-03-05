@@ -9,7 +9,7 @@ import (
 	"github.com/zeebo/errs"
 )
 
-var authErr = errs.Class("authorization repository error")
+var authErr = errs.Class("authorization repository")
 
 type AuthorizationDB struct {
 	db *sql.DB
