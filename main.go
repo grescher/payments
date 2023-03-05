@@ -7,7 +7,7 @@ import (
 
 func main() {
 	if err := cmd.RunApp(); err != nil {
-		log.Fatal(err)
+		log.Printf("exit reason: %v\n", err)
 	}
-	log.Println("done")
+	log.Println("app closed")
 }

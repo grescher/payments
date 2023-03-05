@@ -56,3 +56,12 @@
 ```term
 docker run --name payments_db -p 127.0.0.1:5432:5432 -e POSTGRES_PASSWORD=lthgfhjk -e POSTGRES_USER=payments -e POSTGRES_DB=payments -d postgres
 ```
+
+## CURL commands
+
+```term
+# auth/signup
+
+curl -i -X POST -H "Content-Type: application/json" -d '{"name":"Mike","email":"mike@somemail.com","password":"qwerty"}' localhost:8080/auth/signup
+
+```

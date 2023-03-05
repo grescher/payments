@@ -1,6 +1,7 @@
 package server
 
 import (
+	"context"
 	"net"
 	"net/http"
 	"payments/server/handlers"
@@ -9,14 +10,14 @@ import (
 	"github.com/zeebo/errs"
 )
 
-var serverError = errs.Class("web server error")
+var serverError = errs.Class("web server")
 
 type Server struct {
 	listener net.Listener
 	server   http.Server
 }
 
-func NewServer(listener net.Listener, h *handlers.Handlers) *Server {
+func NewServer(ctx context.Context, listener net.Listener, h *handlers.Handlers) *Server {
 	router := mux.NewRouter()
 
 	authRouter := router.PathPrefix("/auth").Subrouter()
@@ -25,7 +26,12 @@ func NewServer(listener net.Listener, h *handlers.Handlers) *Server {
 
 	return &Server{
 		listener: listener,
-		server:   http.Server{Handler: router},
+		server: http.Server{
+			Handler: router,
+			BaseContext: func(net.Listener) context.Context {
+				return ctx
+			},
+		},
 	}
 }
 
@@ -36,9 +42,6 @@ func (s *Server) Run() (err error) {
 	return nil
 }
 
-func (s *Server) Close() (err error) {
-	if err = s.server.Close(); err != nil {
-		serverError.Wrap(s.server.Close())
-	}
-	return nil
+func (s *Server) Close(ctx context.Context) (err error) {
+	return serverError.Wrap(s.server.Shutdown(ctx))
 }
