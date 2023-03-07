@@ -13,18 +13,38 @@ type User struct {
 	IsActive     bool   `json:"is_active"`
 }
 
+var (
+	errNameIsEmpty     = errors.New("name of the user is empty")
+	errEmailIsEmpty    = errors.New("email of the user is empty")
+	errEmailIsNotValid = errors.New("email of the user is not valid")
+	errPasswordIsEmpty = errors.New("password of the user is empty")
+)
+
 func (u *User) SignUpValidation() (err error) {
 	if isEmpty(u.Name) {
-		return errors.New("name of the user is empty")
+		return errNameIsEmpty
 	}
 	if isEmpty(u.Email) {
-		return errors.New("email of the user is empty")
+		return errEmailIsEmpty
 	}
 	if !isEmailValid(u.Email) {
-		return errors.New("email of the user is not valid")
+		return errEmailIsNotValid
 	}
 	if isEmpty(u.PasswordHash) {
-		return errors.New("password of the user is empty")
+		return errPasswordIsEmpty
+	}
+	return nil
+}
+
+func (u *User) LoginValidation() (err error) {
+	if isEmpty(u.Email) {
+		return errEmailIsEmpty
+	}
+	if !isEmailValid(u.Email) {
+		return errEmailIsNotValid
+	}
+	if isEmpty(u.PasswordHash) {
+		return errPasswordIsEmpty
 	}
 	return nil
 }
