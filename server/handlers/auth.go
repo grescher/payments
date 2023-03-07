@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 	"payments/models"
 	"payments/service"
@@ -30,7 +29,7 @@ func (h *AuthorizationHandlers) SignUp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := input.Validate(); err != nil {
+	if err := input.SignUpValidation(); err != nil {
 		NewErrorResponse(w, authErr.Wrap(err), http.StatusBadRequest)
 		return
 	}
@@ -44,8 +43,6 @@ func (h *AuthorizationHandlers) SignUp(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]interface{}{
 		"id": id,
 	})
-	log.Printf("Handler: You are signed in as %v\n", id)
-
 }
 
 func (h *AuthorizationHandlers) Login(w http.ResponseWriter, r *http.Request) {
