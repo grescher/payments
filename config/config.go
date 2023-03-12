@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
+	"time"
 
 	"github.com/joho/godotenv"
 	"github.com/zeebo/errs"
@@ -16,28 +18,32 @@ const envFilePath = "config.env"
 
 // Names of environment variables.
 const (
-	serverAddress = "SERVER_ADDR"
-	serverPort    = "SERVER_PORT"
-	dbAddress     = "DB_ADDR"
-	dbPort        = "DB_PORT"
-	dbName        = "DB_NAME"
-	dbUser        = "DB_USER"
-	dbPassword    = "DB_PASS"
-	dbSchemaPath  = "DB_SCHEMA_PATH"
-	hashSalt      = "HASH_SALT"
+	serverAddress  = "SERVER_ADDR"
+	serverPort     = "SERVER_PORT"
+	dbAddress      = "DB_ADDR"
+	dbPort         = "DB_PORT"
+	dbName         = "DB_NAME"
+	dbUser         = "DB_USER"
+	dbPassword     = "DB_PASS"
+	dbSchemaPath   = "DB_SCHEMA_PATH"
+	hashSalt       = "HASH_SALT"
+	tokenSignature = "TOKEN_SIGNATURE"
+	tokenTTL       = "TOKEN_TTL_HOURS"
 )
 
 // Configuration default settings.
 const (
-	defaultServerAddress = "127.0.0.1"
-	defaultServerPort    = "8080"
-	defaultDBAddress     = "127.0.0.1"
-	defaultDBPort        = "5432"
-	defaultDBName        = "payments"
-	defaultDBUser        = "payments"
-	defaultDBPassword    = "lthgfhjk"
-	defaultDBSchemaPath  = "./db/schema.sql"
-	defaultHashSalt      = "HaShSaLt"
+	defaultServerAddress  = "127.0.0.1"
+	defaultServerPort     = "8080"
+	defaultDBAddress      = "127.0.0.1"
+	defaultDBPort         = "5432"
+	defaultDBName         = "payments"
+	defaultDBUser         = "payments"
+	defaultDBPassword     = "lthgfhjk"
+	defaultDBSchemaPath   = "./db/schema.sql"
+	defaultHashSalt       = "HaShSaLt"
+	defaultTokenSignature = "Some_Token_Signature"
+	defaultTokenTTL       = "24"
 )
 
 func init() {
@@ -87,6 +93,18 @@ func HashSalt() string {
 	return os.Getenv(hashSalt)
 }
 
+func TokenSignature() string {
+	return os.Getenv(tokenSignature)
+}
+
+func TokenTTL() time.Duration {
+	hours, err := strconv.Atoi(os.Getenv(tokenTTL))
+	if err != nil {
+		return time.Duration(0)
+	}
+	return time.Duration(hours) * time.Hour
+}
+
 // Sets the configuration to defaults.
 func setDefaults() {
 	log.Println("setting configuration defaults")
@@ -99,6 +117,8 @@ func setDefaults() {
 	os.Setenv(dbPassword, defaultDBPassword)
 	os.Setenv(dbSchemaPath, defaultDBSchemaPath)
 	os.Setenv(hashSalt, defaultHashSalt)
+	os.Setenv(tokenSignature, defaultTokenSignature)
+	os.Setenv(tokenTTL, defaultTokenTTL)
 }
 
 // Creates the configuration file.
@@ -111,6 +131,7 @@ func writeConfig(path string) error {
 		return wdErr.Wrap(err)
 	}
 
+	// Write defaults to the created file.
 	log.Println("saving defaults")
 	_, err = fmt.Fprint(
 		file,
@@ -123,6 +144,8 @@ func writeConfig(path string) error {
 		dbPassword+":"+DBPassword()+"\n",
 		dbSchemaPath+":"+DBSchemaPath()+"\n",
 		hashSalt+":"+HashSalt()+"\n",
+		tokenSignature+":"+TokenSignature()+"\n",
+		tokenTTL+":"+fmt.Sprint(int64(TokenTTL()/time.Hour))+"\n",
 	)
 	if err != nil {
 		return wdErr.Wrap(err)
