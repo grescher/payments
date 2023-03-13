@@ -46,4 +46,27 @@ func (h *AuthorizationHandlers) SignUp(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *AuthorizationHandlers) Login(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	var input models.User
+
+	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
+		NewErrorResponse(w, authErr.Wrap(err), http.StatusBadRequest)
+		return
+	}
+
+	if err := input.LoginValidation(); err != nil {
+		NewErrorResponse(w, authErr.Wrap(err), http.StatusBadRequest)
+		return
+	}
+	token, err := h.service.GenerateToken(r.Context(), input)
+	if err != nil {
+		NewErrorResponse(w, authErr.Wrap(err), http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"token": token,
+	})
 }
