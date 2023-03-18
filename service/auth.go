@@ -29,10 +29,13 @@ type tokenClaims struct {
 	UserID int `json:"user_id"`
 }
 
+// AuthorizationService contains repository interface Authorization.
 type AuthorizationService struct {
 	repo repository.Authorization
 }
 
+// NewAuthorizationService creates a new authorization service which contains the underlying
+// repository Authorization interface.
 func NewAuthorizationService(r *repository.Repository) *AuthorizationService {
 	return &AuthorizationService{repo: r}
 }
