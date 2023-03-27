@@ -61,11 +61,11 @@ func (s *AuthorizationService) GenerateToken(ctx context.Context, user models.Us
 	}
 
 	claims := tokenClaims{
-		jwt.RegisteredClaims{
+		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(config.TokenTTL())),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
 		},
-		id,
+		UserID: id,
 	}
 	token := jwt.NewWithClaims(tokenSigningMethod, claims)
 
